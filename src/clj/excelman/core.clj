@@ -7,8 +7,14 @@
    [clojure.tools.cli :refer [parse-opts]]
    [clojure.tools.logging :as log]
    [mount.core :as mount]
-   [excelman.xlsx :as xlsx])
+   [excelman.xlsx :as xlsx]
+   [excelman.db.core :as db])
   (:gen-class))
+
+(defonce data (atom (xlsx/read-columns {:source "resources/foods.xlsx"
+                                        :sheet "Fruit"
+                                        :cols {:A :item :B :price}})))
+
 
 ;; log uncaught exceptions in threads
 (Thread/setDefaultUncaughtExceptionHandler
@@ -55,10 +61,9 @@
     (log/info component "started"))
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
-(defonce data (atom (xlsx/read-columns {:source "resources/foods.xlsx" 
-                                        :sheet "Fruit"
-                                        :cols {:A :item :B :price}})))
-
 (defn -main [& args]
-  (println @data)
-  (start-app args))
+  (start-app args)
+  ; (println (first @data))
+  (doall
+   (map db/create-item (seq @data))))
+

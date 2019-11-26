@@ -35,7 +35,7 @@
                  [ring/ring-defaults "0.3.2"]
                  [selmer "1.12.17"]
                  [dk.ative/docjure "1.12.0"]
-]
+                 [org.clojure/data.json "0.2.7"]]
 
   :min-lein-version "2.0.0"
   
